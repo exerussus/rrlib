@@ -1,4 +1,13 @@
 
+
+def normalize_text(_type):
+    match _type:
+        case "запрос":
+            return input(f"Введите {_type}, или команду: ").lower().strip()
+        case "ответ":
+            return input(f"Введите {_type}, или команду: ").strip()
+
+
 # Сохранение в json. name - это meaning, а file принимает переменную-словарь,
 # path - относительный путь к файлу, но не более одной папки
 def save(name, file, path='jsonComLab/'):
@@ -23,14 +32,14 @@ def creator(meaning, request, response):
     save(meaning, dct)
 
 
-# заполнение листов, где _type - это "запрос", или "ответ". _type влияет только на текст
+# заполнение листов, где _type - это "запрос", или "ответ".
 def smart_input(_type):
 
     result = []
     key = True
     print('Для продолжения, введите "$$next". Чтобы узнать все команды - введите "$$help".')
     while key:
-        input_text = input(f"Введите {_type}, или команду: ")
+        input_text = normalize_text(_type)
         # проверка на рабочие команды
         if "$$" in input_text:
             match input_text:
@@ -54,7 +63,8 @@ def smart_input(_type):
                 case _:
                     print("Команда написана неверно, либо отсутствует.")
         else:
-            result.append(input_text)
+            if input_text not in result:
+                result.append(input_text)
 
     return result
 
